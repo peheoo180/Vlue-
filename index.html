@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKURA ROBUX STORE</title>
+    <title>SAKURA ROBUX STORE - SIMULATOR</title>
     <style>
         :root { --sakura: #ffb7c5; --dark-pink: #ff8fa3; --bg: #0d0d0d; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
-
-        .top-bar { background: rgba(255, 183, 197, 0.1); text-align: center; padding: 5px; font-size: 10px; color: var(--sakura); letter-spacing: 1px; }
 
         header { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -16,55 +14,50 @@
             background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 100;
             backdrop-filter: blur(10px);
         }
-        .logo-text { font-size: 22px; font-weight: bold; text-shadow: 0 0 10px var(--sakura); }
-        .balance-box { display: flex; gap: 10px; }
-        .stat { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 10px; border: 1px solid var(--sakura); font-size: 13px; font-weight: bold; }
+        .logo-text { font-size: 20px; font-weight: bold; text-shadow: 0 0 10px var(--sakura); }
+        .stat { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 10px; border: 1px solid var(--sakura); font-size: 13px; font-weight: bold; margin-left: 5px; }
 
         .shop-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
         
-        /* Card vật phẩm */
         .item-card { 
             background: #1a1a1a; border-radius: 15px; overflow: hidden; 
-            border: 1px solid rgba(255,183,197,0.3); position: relative;
-            transition: 0.3s;
+            border: 1px solid rgba(255,183,197,0.3); text-align: center; padding-bottom: 15px;
         }
-        .item-card:hover { transform: translateY(-5px); border-color: var(--sakura); }
-        
-        .item-img { 
-            width: 100%; height: 150px; background: radial-gradient(circle, #252525, #111);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .rbx-icon { width: 50px; filter: drop-shadow(0 0 10px #fff); }
-        .rbx-amount { font-size: 22px; font-weight: 900; color: #fff; margin-top: 5px; }
+        .item-img { height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #222; }
+        .rbx-icon { width: 40px; filter: drop-shadow(0 0 5px #fff); }
 
-        .price-label { 
-            position: absolute; top: 10px; left: 10px; 
-            background: #ff0055; color: #fff; padding: 2px 8px; 
-            border-radius: 5px; font-size: 12px; font-weight: bold;
+        /* PHẦN RÚT ROBUX Ở CUỐI */
+        .withdraw-section {
+            background: rgba(255, 183, 197, 0.05); padding: 30px 20px;
+            border-top: 2px solid var(--sakura); text-align: center; margin-top: 40px;
+        }
+        .withdraw-box { max-width: 400px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 20px; border: 1px solid var(--sakura); }
+        input { 
+            width: 80%; padding: 12px; margin: 10px 0; border-radius: 10px; 
+            border: 1px solid var(--sakura); background: #000; color: #fff; text-align: center;
         }
 
-        .item-info { padding: 12px; text-align: center; }
-        .btn-buy { 
-            background: var(--sakura); color: #4a101a; border: none; 
-            padding: 8px 0; width: 100%; border-radius: 8px; 
-            cursor: pointer; font-weight: bold; font-size: 13px;
-        }
-
-        /* Modal Vòng Quay */
+        /* MODAL VÒNG QUAY CÓ HÌNH */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center;
         }
-        .modal-content {
-            background: #1a1a1a; padding: 25px; border-radius: 20px; border: 2px solid var(--sakura);
-            text-align: center; width: 300px;
-        }
         .wheel {
-            width: 220px; height: 220px; border-radius: 50%; border: 4px solid #fff;
-            margin: 15px auto; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
-            background: conic-gradient(#ffb7c5 0% 25%, #ff8fa3 25% 50%, #ffb7c5 50% 75%, #ff8fa3 75% 100%);
-            display: flex; justify-content: center; align-items: center; font-weight: bold;
+            width: 260px; height: 260px; border-radius: 50%; border: 5px solid #fff;
+            margin: 20px auto; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            background: conic-gradient(
+                #ffb7c5 0deg 90deg, #ff8fa3 90deg 180deg, 
+                #ffb7c5 180deg 270deg, #ff8fa3 270deg 360deg
+            );
+            display: flex; justify-content: center; align-items: center; position: relative;
         }
+        .wheel-item-img { position: absolute; width: 35px; }
+
+        .btn-main { background: var(--sakura); color: #4a101a; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; }
+
+        /* Loading */
+        .loader { display: none; width: 30px; height: 30px; border: 4px solid #333; border-top: 4px solid var(--sakura); border-radius: 50%; animation: spin 1s linear infinite; margin: 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .petal { position: absolute; background: var(--sakura); border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
@@ -72,130 +65,116 @@
 </head>
 <body>
 
-    <div class="top-bar">🌸 SAKURA SIMULATOR - GIẢI TRÍ KHÔNG CỔ XÚY LÀM THẬT 🌸</div>
-
     <header>
         <div class="logo-text">SAKURA STORE</div>
-        <div class="balance-box">
-            <div class="stat" style="color:#00ff00;">💰 <span id="money">0</span>$</div>
-            <div class="stat" style="color:#00f2ff;">💎 <span id="robux">0</span> R$</div>
+        <div style="display:flex;">
+            <div class="stat">💰 <span id="money">0</span>$</div>
+            <div class="stat">💎 <span id="robux">0</span> R$</div>
         </div>
     </header>
 
     <div class="shop-container">
         <div class="item-card">
-            <div class="price-label">49,000đ</div>
-            <div class="item-img">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon">
-                <div class="rbx-amount">2,500 R$</div>
-            </div>
-            <div class="item-info">
-                <button class="btn-buy" onclick="buyItem(49000, 2500)">MUA GÓI NÀY</button>
-            </div>
+            <div class="item-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon"><div style="font-weight:bold;">2,500 R$</div></div>
+            <p style="font-size:12px;">Giá: 49,000đ</p>
+            <button class="btn-main" onclick="buy(49000, 2500)" style="width:80%;">MUA</button>
         </div>
-
         <div class="item-card">
-            <div class="price-label">99,000đ</div>
-            <div class="item-img">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon">
-                <div class="rbx-amount">6,000 R$</div>
-            </div>
-            <div class="item-info">
-                <button class="btn-buy" onclick="buyItem(99000, 6000)">MUA GÓI NÀY</button>
-            </div>
+            <div class="item-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon"><div style="font-weight:bold;">6,000 R$</div></div>
+            <p style="font-size:12px;">Giá: 99,000đ</p>
+            <button class="btn-main" onclick="buy(99000, 6000)" style="width:80%;">MUA</button>
         </div>
+        <div class="item-card" style="grid-column: span 2;">
+            <h3 style="color:var(--sakura);">🌸 TÚI MÙ ĐẠI GIA (149K) 🌸</h3>
+            <button class="btn-main" onclick="openWheel()" style="width:50%;">MỞ TÚI MÙ</button>
+        </div>
+    </div>
 
-        <div class="item-card" style="grid-column: span 2; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.alphacoders.com/605/605592.jpg'); background-size: cover;">
-            <div class="item-info">
-                <h3 style="color:var(--sakura); margin: 5px;">🌸 TÚI MÙ ĐẠI GIA 🌸</h3>
-                <p style="font-size: 11px;">Giá: 149,000đ - Tỉ lệ nổ 500k Robux!</p>
-                <button class="btn-buy" onclick="openWheel()">MỞ TÚI MÙ (149K)</button>
-            </div>
+    <div class="withdraw-section">
+        <div class="withdraw-box">
+            <h3 style="color:var(--sakura); margin-top:0;">💎 RÚT ROBUX VỀ MÁY</h3>
+            <input type="text" id="wdName" placeholder="Nhập tên nhân vật...">
+            <input type="number" id="wdAmount" placeholder="Số Robux muốn rút...">
+            <div id="wdLoader" class="loader"></div>
+            <button class="btn-main" id="wdBtn" onclick="withdraw()">XÁC NHẬN RÚT</button>
+            <p id="wdMsg" style="font-size:12px; margin-top:10px;"></p>
         </div>
     </div>
 
     <div id="wheelModal" class="modal">
-        <div class="modal-content">
+        <div style="background:#1a1a1a; padding:25px; border-radius:20px; border:2px solid var(--sakura); text-align:center; width:320px;">
             <h2 style="color:var(--sakura); margin:0;">LUCKY SPIN</h2>
             <div style="position:relative;">
-                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:20px solid #fff; z-index:10;"></div>
-                <div id="mainWheel" class="wheel">SPIN</div>
+                <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:25px solid #fff; z-index:10;"></div>
+                <div id="mainWheel" class="wheel">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="top:20px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="right:20px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="bottom:20px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="left:20px;">
+                </div>
             </div>
-            <button class="btn-buy" id="spinBtn" onclick="spinNow()" style="margin-top:15px;">QUAY NGAY</button>
+            <button class="btn-main" id="spinBtn" onclick="spin()">QUAY NGAY</button>
             <button onclick="closeModal()" style="background:none; border:none; color:#888; margin-top:10px; cursor:pointer;">Đóng</button>
         </div>
     </div>
 
     <script>
-        let money = 50000; // Tiền ban đầu
-        let robux = 0;
-        let isAdmin = false;
+        let money = 50000; let robux = 0;
+        // Trợ cấp 10k mỗi 30s
+        setInterval(() => { money += 10000; update(); }, 30000);
 
-        // Tự cộng tiền 10k mỗi 30 giây
-        setInterval(() => {
-            if (!isAdmin) {
-                money += 10000;
-                showNoti("+10,000$ (Trợ cấp mỗi 30s)");
-            } else {
-                money += 1000000000; // Admin 1 tỷ
-            }
-            updateDisplay();
-        }, 30000);
-
-        function updateDisplay() {
+        function update() {
             document.getElementById('money').innerText = money.toLocaleString();
             document.getElementById('robux').innerText = robux.toLocaleString();
         }
 
-        function showNoti(text) {
-            console.log(text); // Có thể thêm hiệu ứng popup nhỏ nếu muốn
+        function buy(p, r) {
+            if(money >= p) { money -= p; robux += r; update(); alert("✅ Đã mua thành công!"); }
+            else { alert("❌ Bạn không đủ tiền!"); }
         }
 
-        function buyItem(price, rbxAmount) {
-            if (money >= price) {
-                money -= price;
-                robux += rbxAmount;
-                updateDisplay();
-                alert(`✅ MUA THÀNH CÔNG!\nBạn nhận được ${rbxAmount.toLocaleString()} Robux.\nTài khoản bị trừ ${price.toLocaleString()}$.`);
-            } else {
-                alert("❌ KHÔNG ĐỦ TIỀN!\nChờ 30s để nhận thêm trợ cấp nhé.");
-            }
-        }
-
-        // --- VÒNG QUAY ---
         function openWheel() { document.getElementById('wheelModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('wheelModal').style.display = 'none'; }
 
-        function spinNow() {
-            if (money < 149000) { alert("Không đủ 149k để mở túi!"); return; }
-            
-            money -= 149000;
-            updateDisplay();
-            const wheel = document.getElementById('mainWheel');
+        function spin() {
+            if(money < 149000) { alert("Thiếu tiền mở túi!"); return; }
+            money -= 149000; update();
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
-
-            const rand = Math.random() * 100;
-            let win = 0; let deg = 0;
-            if (rand < 50) { win = 10000; deg = 45; }
-            else if (rand < 80) { win = 50000; deg = 135; }
-            else if (rand < 95) { win = 100000; deg = 225; }
-            else { win = 500000; deg = 315; }
-
-            wheel.style.transform = `rotate(${1800 + deg}deg)`;
-
+            const deg = Math.floor(Math.random() * 360) + 1800;
+            document.getElementById('mainWheel').style.transform = `rotate(${deg}deg)`;
             setTimeout(() => {
-                alert(`🌸 BẠN ĐÃ QUAY TRÚNG: ${win.toLocaleString()} ROBUX!`);
-                robux += win;
-                updateDisplay();
-                btn.disabled = false;
-                wheel.style.transition = 'none';
-                wheel.style.transform = `rotate(${deg}deg)`;
-                setTimeout(() => wheel.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)', 50);
+                let win = [100, 500, 10000, 50000][Math.floor(Math.random()*4)];
+                alert(`🌸 TRÚNG ${win.toLocaleString()} ROBUX!`);
+                robux += win; update(); btn.disabled = false;
             }, 4000);
         }
 
-        // Hoa anh đào rơi
+        function withdraw() {
+            let name = document.getElementById('wdName').value;
+            let amt = parseInt(document.getElementById('wdAmount').value);
+            let msg = document.getElementById('wdMsg');
+            let btn = document.getElementById('wdBtn');
+            let loader = document.getElementById('wdLoader');
+
+            if(!name || !amt) { alert("Nhập đủ thông tin!"); return; }
+            if(amt > robux) { alert("Bạn không có đủ Robux!"); return; }
+
+            btn.style.display = "none";
+            loader.style.display = "block";
+            msg.innerText = "Đang kết nối đến máy chủ Roblox...";
+
+            setTimeout(() => {
+                robux -= amt; update();
+                loader.style.display = "none";
+                btn.style.display = "block";
+                msg.style.color = "#00ff00";
+                msg.innerText = `✅ THÀNH CÔNG! ${amt.toLocaleString()} Robux đang được chuyển đến ${name}.`;
+                document.getElementById('wdAmount').value = "";
+            }, 3000);
+        }
+
+        // Hoa rơi
         setInterval(() => {
             const p = document.createElement('div');
             p.className = 'petal';
@@ -205,8 +184,7 @@
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 5000);
         }, 300);
-
-        updateDisplay();
+        update();
     </script>
 </body>
 </html>
