@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox | Redeem Toy Code</title>
+    <title>REDEEM CENTER</title>
     <style>
+        /* Giao diện tối, viền đỏ/hồng cho cháy */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f2f4f5;
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,101 +17,89 @@
             margin: 0;
         }
         .container {
-            background: white;
+            background: #1a1a1a;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
             text-align: center;
-            width: 350px;
-        }
-        h2 { color: #393b3d; }
-        input {
+            border: 2px solid #ff0055;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
             width: 90%;
-            padding: 12px;
-            margin: 20px 0;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            font-size: 16px;
+            max-width: 400px;
         }
-        button {
-            background-color: #00b06f;
+        /* Chỗ này để ảnh của bạn */
+        .banner-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        h2 { letter-spacing: 2px; color: #ff0055; }
+        input {
+            width: 80%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #000;
+            color: #00ff00;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .btn {
+            background: #ff0055;
             color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 5px;
-            cursor: pointer;
             font-weight: bold;
-            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+            width: 88%;
+            transition: 0.3s;
         }
-        button:hover { background-color: #008a56; }
-
-        /* Cái Popup khi nạp thành công */
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            padding: 20px;
-            z-index: 100;
-            text-align: center;
-            width: 300px;
-        }
-        #popup img {
-            width: 150px;
-            height: 150px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 50;
-        }
-        .success-text { color: #00b06f; font-weight: bold; font-size: 18px; }
+        .btn:hover { background: #ff3377; transform: scale(1.02); }
+        #status { margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" width="50" alt="logo">
-    <h2>Redeem Roblox Item</h2>
-    <p>Enter your toy code below to claim your virtual item.</p>
-    <input type="text" id="toyCode" placeholder="Enter Code (e.g. 123456)">
-    <button onclick="checkCode()">REDEEM</button>
-</div>
-
-<div id="overlay"></div>
-<div id="popup">
-    <div class="success-text">SUCCESSFULLY REDEEMED!</div>
-    <p>You have received:</p>
-    <img id="itemImage" src="https://ibb.co/dwMn3Dg3" alt="Baddie Face">
-    <h3 id="itemName">Baddie Street Face</h3>
-    <button onclick="closePopup()">AWESOME!</button>
+    <img src="https://i.ibb.co/xxxxx/your-photo.jpg" class="banner-img" alt="Baddie Center">
+    
+    <h2>REDEEM CODES</h2>
+    <p>Nhập mã bạn tự vẽ vào đây:</p>
+    
+    <input type="text" id="coupon" placeholder="ENTER CODE...">
+    <button class="btn" onclick="processRedeem()">XÁC NHẬN MÃ</button>
+    
+    <div id="status"></div>
 </div>
 
 <script>
-    function checkCode() {
-        var code = document.getElementById("toyCode").value;
-        var popup = document.getElementById("popup");
-        var overlay = document.getElementById("overlay");
+    function processRedeem() {
+        var input = document.getElementById("coupon").value.trim().toUpperCase();
+        var status = document.getElementById("status");
 
-        // Mày có thể đổi cái mã "BADDIE666" thành bất cứ gì mày thích
-        if (code.toUpperCase() === "DIVAS2072799") {
-            overlay.style.display = "block";
-            popup.style.display = "block";
-        } else {
-            alert("Mã này dỏm rồi mày ơi! Nhập lại đi.");
+        // --- CHỖ SỬA 4 CÁI MÃ CỦA BẠN ---
+        var code1 = "MA1"; 
+        var code2 = "MA2";
+        var code3 = "MA3";
+        var code4 = "MA4";
+        // --------------------------------
+
+        if (input === "") {
+            status.style.color = "yellow";
+            status.innerHTML = "Vui lòng nhập gì đó đi má!";
+        } 
+        else if (input === code1 || input === code2 || input === code3 || input === code4) {
+            status.style.color = "#00ff00";
+            status.innerHTML = "✅ MÃ CHUẨN! Đang xử lý phần thưởng...";
+            // Bạn có thể thêm lệnh chuyển hướng link ở đây nếu muốn
+        } 
+        else {
+            status.style.color = "#ff0000";
+            status.innerHTML = "❌ Mã này sai rồi, kiểm tra lại đi!";
         }
-    }
-
-    function closePopup() {
-        location.reload(); // Bấm xong cho nó load lại trang như thật
     }
 </script>
 
