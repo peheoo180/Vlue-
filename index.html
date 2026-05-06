@@ -3,154 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Redeem Center - Sakura</title>
+    <title>Roblox Redeem Center</title>
     <style>
-        :root { --main-pink: #ffb7c5; --glow-pink: #ff8fa3; }
-        body {
-            background: #0d0d0d;
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://i.ibb.co/L6V2YvQ/sakura-bg.jpg');
-            background-size: cover;
+        :root { --pink: #ffb7c5; }
+        body, html { margin: 0; padding: 0; height: 100%; background: #0d0d0d; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+
+        /* --- MÀN HÌNH LOADING --- */
+        #loader {
+            position: fixed; width: 100%; height: 100%; background: #000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #333; border-top: 5px solid var(--pink);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: var(--pink); margin-top: 15px; letter-spacing: 2px; font-size: 12px; }
+
+        /* --- GIAO DIỆN CHÍNH --- */
+        #main-content {
+            display: none; height: 100vh; width: 100vw;
+            justify-content: center; align-items: center;
+            /* Thay link nền chuẩn không bị chữ ImgBB */
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://wallpaperaccess.com/full/1151165.jpg');
+            background-size: cover; background-position: center;
         }
 
-        /* Disclaimer góc phải */
         .disclaimer {
-            position: absolute; top: 15px; right: 15px;
-            font-size: 10px; color: rgba(255, 255, 255, 0.4);
-            text-align: right; line-height: 1.4;
+            position: absolute; top: 10px; right: 10px; font-size: 9px;
+            color: rgba(255,255,255,0.3); text-align: right;
         }
 
-        /* Khung chính giống ảnh */
-        .redeem-container {
-            background: rgba(40, 20, 25, 0.6);
-            padding: 40px;
-            border-radius: 30px;
-            border: 2px solid var(--main-pink);
-            box-shadow: 0 0 40px rgba(255, 183, 197, 0.2);
-            text-align: center;
-            width: 450px;
-            position: relative;
+        .card {
+            background: rgba(20, 20, 20, 0.9); padding: 30px; border-radius: 25px;
+            border: 1.5px solid var(--pink); text-align: center; width: 320px;
+            box-shadow: 0 0 30px rgba(255, 183, 197, 0.2); backdrop-filter: blur(10px);
         }
 
-        .roblox-header { width: 220px; filter: drop-shadow(0 0 10px #fff); margin-bottom: 20px; }
+        .logo { width: 140px; margin-bottom: 10px; filter: drop-shadow(0 0 5px #fff); }
+        h2 { font-size: 24px; color: #fff; text-shadow: 0 0 10px var(--pink); margin: 5px 0; }
         
-        h1 { font-size: 32px; letter-spacing: 3px; color: #fff; text-shadow: 0 0 10px var(--main-pink); margin: 0; }
-        .sub-text { font-size: 14px; opacity: 0.9; margin: 10px 0 25px; }
-
-        .input-box {
-            background: #111;
-            border: 2px solid #fff;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        .input-area {
+            background: #000; border: 1.5px solid #fff; border-radius: 12px;
+            padding: 10px; margin: 20px 0; text-align: left;
         }
         input {
-            background: transparent; border: none; color: #fff;
-            font-size: 20px; width: 100%; text-align: left; outline: none;
+            background: transparent; border: none; color: #fff; font-size: 18px;
+            width: 100%; outline: none; font-weight: bold;
         }
 
-        .btn-redeem {
+        .btn {
             background: linear-gradient(to bottom, #ffcbd5, #ff8fa3);
-            border: none; padding: 15px; width: 100%;
-            border-radius: 15px; font-size: 22px; font-weight: bold;
-            color: #4a101a; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(255, 143, 163, 0.4);
+            border: none; padding: 12px; width: 100%; border-radius: 12px;
+            font-size: 18px; font-weight: bold; color: #4a101a; cursor: pointer;
         }
 
-        /* Bảng thông báo vật phẩm (Popup) */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.9);
-            justify-content: center; align-items: center; z-index: 100;
-        }
-        .modal-content {
-            background: #1a1a1a; padding: 30px; border-radius: 20px;
-            border: 2px solid #00ff00; text-align: center; width: 300px;
-        }
-        .item-img { width: 150px; height: 150px; border-radius: 10px; margin: 15px 0; border: 1px solid #333; }
-        .btn-close { background: #00ff00; color: #000; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-
-        /* Hoa rơi */
-        .sakura { position: absolute; background: #ffb7c5; border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
+        /* Hiệu ứng hoa rơi */
+        .petal { position: absolute; background: var(--pink); border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="disclaimer">
-        This is a simulation only, intended for entertainment and not for scams...<br>
-        Đây chỉ là mô phỏng, mang giải trí và không cổ xúy cho những hành động lừa đảo...
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loading-text">ĐANG TẢI DỮ LIỆU...</div>
     </div>
 
-    <div class="redeem-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/2560px-Roblox_player_icon_black.svg.png" class="roblox-header">
-        <h1>🌸 REDEEM CENTER 🌸</h1>
-        <p class="sub-text">Enter your drawing codes below<br>Nhập mã tự vẽ của bạn vào đây</p>
-        
-        <div class="input-box">
-            <span style="font-size: 10px; display: block; color: #aaa; text-align: left;">ENTER CODE HERE...</span>
-            <input type="text" id="codeInp" placeholder="CODEXXX">
+    <div id="main-content">
+        <div class="disclaimer">
+            This is a simulation only. <br> Đây chỉ là mô phỏng giải trí.
         </div>
 
-        <button class="btn-redeem" onclick="check()">🌸 XÁC NHẬN MÃ 🌸</button>
-        
-        <div id="status" style="margin-top: 20px; font-weight: bold;"></div>
-    </div>
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="logo">
+            <h2>🌸 REDEEM CENTER 🌸</h2>
+            <p style="font-size: 11px; opacity: 0.7;">Nhập mã tự vẽ của bạn vào đây</p>
+            
+            <div class="input-area">
+                <span style="font-size: 9px; color: #888; display: block;">ENTER CODE HERE...</span>
+                <input type="text" id="codeIn" placeholder="CODE123...">
+            </div>
 
-    <div id="itemModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color: #00ff00;">XÁC NHẬN THÀNH CÔNG!</h2>
-            <p id="itemName">Vật phẩm: [Tên vật phẩm]</p>
-            <img src="https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" id="itemImg" class="item-img">
-            <p style="font-size: 13px;">Vật phẩm đã có trong kho của bạn.</p>
-            <button class="btn-close" onclick="closeModal()">ĐÓNG</button>
+            <button class="btn" onclick="redeem()">🌸 XÁC NHẬN MÃ 🌸</button>
+            <div id="msg" style="margin-top: 15px; font-weight: bold; font-size: 13px;"></div>
         </div>
     </div>
 
     <script>
-        // --- CHỖ CÀI MÃ VÀ ẢNH VẬT PHẨM ---
-        const giftData = {
-            "CODE1": { name: "Kiếm Hoa Đào", img: "https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" },
-            "CODE2": { name: "Cánh Thiên Thần", img: "https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" }
+        // Hiệu ứng Loading biến mất sau 2 giây
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+            }, 2000); 
         };
 
-        function check() {
-            let val = document.getElementById('codeInp').value.trim().toUpperCase();
-            let status = document.getElementById('status');
-            
-            if (giftData[val]) {
-                document.getElementById('itemName').innerText = "Vật phẩm: " + giftData[val].name;
-                document.getElementById('itemImg').src = giftData[val].img;
-                document.getElementById('itemModal').style.display = 'flex';
-                status.innerHTML = "";
+        const myCodes = ["MA1", "MA2", "MA3", "MA4"];
+
+        function redeem() {
+            let val = document.getElementById('codeIn').value.trim().toUpperCase();
+            let msg = document.getElementById('msg');
+            if(myCodes.includes(val)) {
+                msg.style.color = "#00ff00";
+                msg.innerHTML = "✅ THÀNH CÔNG! <br> Vật phẩm đã được chuyển vào kho.";
             } else {
-                status.style.color = "#ff4d4d";
-                status.innerHTML = "❌ MÃ SAI RỒI BẠN ƠI!";
+                msg.style.color = "#ff4d4d";
+                msg.innerHTML = "❌ MÃ SAI RỒI!";
             }
         }
 
-        function closeModal() { document.getElementById('itemModal').style.display = 'none'; }
-
-        // Hiệu ứng hoa rơi
-        function createSakura() {
-            const s = document.createElement('div');
-            s.className = 'sakura';
-            s.style.left = Math.random() * 100 + 'vw';
-            let size = Math.random() * 7 + 5 + 'px';
-            s.style.width = size; s.style.height = size;
-            s.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 5000);
+        function createPetal() {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.style.left = Math.random() * 100 + 'vw';
+            let size = Math.random() * 8 + 5 + 'px';
+            p.style.width = size; p.style.height = size;
+            p.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 5000);
         }
-        setInterval(createSakura, 200);
+        setInterval(createPetal, 300);
     </script>
 </body>
 </html>
