@@ -3,187 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKURA ROBUX STORE - SIMULATOR</title>
+    <title>🌸 SAKURA PREMIUM STORE 🌸</title>
     <style>
-        :root { --sakura: #ffb7c5; --dark-pink: #ff8fa3; --bg: #0d0d0d; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --sakura: #ffb7c5; --neon-pink: #ff007f; --neon-blue: #00f2ff; --neon-green: #39ff14; }
+        body { background: #050505; color: white; font-family: 'Lexend', sans-serif; margin: 0; overflow-x: hidden; }
 
+        /* Hiệu ứng hào quang cho Header */
         header { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 20px; border-bottom: 2px solid var(--sakura); 
-            background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 100;
-            backdrop-filter: blur(10px);
+            padding: 20px; border-bottom: 3px solid var(--sakura); 
+            background: rgba(10, 10, 10, 0.9); position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 0 20px var(--sakura);
         }
-        .logo-text { font-size: 20px; font-weight: bold; text-shadow: 0 0 10px var(--sakura); }
-        .stat { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 10px; border: 1px solid var(--sakura); font-size: 13px; font-weight: bold; margin-left: 5px; }
+        .logo { font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: #fff; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
+        .stats { display: flex; gap: 10px; }
+        .stat-card { background: #000; padding: 8px 15px; border-radius: 12px; border: 2px solid var(--sakura); box-shadow: inset 0 0 10px var(--sakura); font-weight: bold; font-size: 14px; }
 
-        .shop-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
+        /* Grid sản phẩm lung linh */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 25px; max-width: 900px; margin: auto; }
         
-        .item-card { 
-            background: #1a1a1a; border-radius: 15px; overflow: hidden; 
-            border: 1px solid rgba(255,183,197,0.3); text-align: center; padding-bottom: 15px;
+        .card { 
+            background: #111; border-radius: 20px; overflow: hidden; position: relative;
+            border: 2px solid rgba(255,255,255,0.1); transition: 0.4s;
+            cursor: pointer; animation: glow 3s infinite alternate;
         }
-        .item-img { height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #222; }
-        .rbx-icon { width: 40px; filter: drop-shadow(0 0 5px #fff); }
+        @keyframes glow {
+            from { border-color: var(--neon-pink); box-shadow: 0 0 5px var(--neon-pink); }
+            to { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+        }
+        .card:hover { transform: scale(1.05) rotate(1deg); z-index: 10; }
 
-        /* PHẦN RÚT ROBUX Ở CUỐI */
-        .withdraw-section {
-            background: rgba(255, 183, 197, 0.05); padding: 30px 20px;
-            border-top: 2px solid var(--sakura); text-align: center; margin-top: 40px;
-        }
-        .withdraw-box { max-width: 400px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 20px; border: 1px solid var(--sakura); }
-        input { 
-            width: 80%; padding: 12px; margin: 10px 0; border-radius: 10px; 
-            border: 1px solid var(--sakura); background: #000; color: #fff; text-align: center;
-        }
+        .card-img { height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #222, #000); }
+        .item-icon { width: 70px; filter: drop-shadow(0 0 15px #fff); }
+        .item-label { margin-top: 10px; font-weight: 900; font-size: 18px; color: #fff; text-shadow: 0 0 5px #000; }
+        
+        .price-badge { position: absolute; top: 10px; right: 10px; background: #ff0055; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; box-shadow: 0 0 10px #ff0055; }
 
-        /* MODAL VÒNG QUAY CÓ HÌNH */
+        .card-info { padding: 15px; text-align: center; background: linear-gradient(to top, #1a1a1a, transparent); }
+        .buy-txt { font-weight: bold; color: var(--sakura); text-transform: uppercase; font-size: 12px; }
+
+        /* MODAL KHUI QUÀ */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center;
         }
-        .wheel {
-            width: 260px; height: 260px; border-radius: 50%; border: 5px solid #fff;
-            margin: 20px auto; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
-            background: conic-gradient(
-                #ffb7c5 0deg 90deg, #ff8fa3 90deg 180deg, 
-                #ffb7c5 180deg 270deg, #ff8fa3 270deg 360deg
-            );
-            display: flex; justify-content: center; align-items: center; position: relative;
+        .modal-content {
+            background: #151515; padding: 40px; border-radius: 30px; border: 3px solid var(--sakura);
+            text-align: center; width: 340px; box-shadow: 0 0 50px var(--sakura);
         }
-        .wheel-item-img { position: absolute; width: 35px; }
+        .loading-spin { width: 60px; height: 60px; border: 6px solid #222; border-top: 6px solid var(--neon-pink); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        .btn-main { background: var(--sakura); color: #4a101a; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; }
+        /* HIỆU ỨNG RÚT ROBUX */
+        .withdraw-area { margin: 40px auto; max-width: 400px; padding: 20px; text-align: center; border: 2px dashed var(--sakura); border-radius: 20px; }
+        input { width: 80%; padding: 15px; border-radius: 10px; border: none; margin-bottom: 10px; background: #222; color: #fff; outline: 1px solid var(--sakura); }
+        .btn-withdraw { background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue)); color: #fff; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* Loading */
-        .loader { display: none; width: 30px; height: 30px; border: 4px solid #333; border-top: 4px solid var(--sakura); border-radius: 50%; animation: spin 1s linear infinite; margin: 15px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .petal { position: absolute; background: var(--sakura); border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
-        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
+        /* Cánh hoa rơi đa sắc */
+        .petal { position: absolute; border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-text">SAKURA STORE</div>
-        <div style="display:flex;">
-            <div class="stat">💰 <span id="money">0</span>$</div>
-            <div class="stat">💎 <span id="robux">0</span> R$</div>
+        <div class="logo">🌸 SAKURA SHOP</div>
+        <div class="stats">
+            <div class="stat-card" style="color:var(--neon-green)">💰 <span id="money">100,000</span></div>
+            <div class="stat-card" style="color:var(--neon-blue)">💎 <span id="robux">0</span></div>
         </div>
     </header>
 
-    <div class="shop-container">
-        <div class="item-card">
-            <div class="item-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon"><div style="font-weight:bold;">2,500 R$</div></div>
-            <p style="font-size:12px;">Giá: 49,000đ</p>
-            <button class="btn-main" onclick="buy(49000, 2500)" style="width:80%;">MUA</button>
-        </div>
-        <div class="item-card">
-            <div class="item-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="rbx-icon"><div style="font-weight:bold;">6,000 R$</div></div>
-            <p style="font-size:12px;">Giá: 99,000đ</p>
-            <button class="btn-main" onclick="buy(99000, 6000)" style="width:80%;">MUA</button>
-        </div>
-        <div class="item-card" style="grid-column: span 2;">
-            <h3 style="color:var(--sakura);">🌸 TÚI MÙ ĐẠI GIA (149K) 🌸</h3>
-            <button class="btn-main" onclick="openWheel()" style="width:50%;">MỞ TÚI MÙ</button>
-        </div>
-    </div>
-
-    <div class="withdraw-section">
-        <div class="withdraw-box">
-            <h3 style="color:var(--sakura); margin-top:0;">💎 RÚT ROBUX VỀ MÁY</h3>
-            <input type="text" id="wdName" placeholder="Nhập tên nhân vật...">
-            <input type="number" id="wdAmount" placeholder="Số Robux muốn rút...">
-            <div id="wdLoader" class="loader"></div>
-            <button class="btn-main" id="wdBtn" onclick="withdraw()">XÁC NHẬN RÚT</button>
-            <p id="wdMsg" style="font-size:12px; margin-top:10px;"></p>
-        </div>
-    </div>
-
-    <div id="wheelModal" class="modal">
-        <div style="background:#1a1a1a; padding:25px; border-radius:20px; border:2px solid var(--sakura); text-align:center; width:320px;">
-            <h2 style="color:var(--sakura); margin:0;">LUCKY SPIN</h2>
-            <div style="position:relative;">
-                <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:25px solid #fff; z-index:10;"></div>
-                <div id="mainWheel" class="wheel">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="top:20px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="right:20px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="bottom:20px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="wheel-item-img" style="left:20px;">
-                </div>
+    <div class="grid">
+        <div class="card" onclick="openBox(49000, 'ROBUX PACK', 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg')">
+            <div class="price-badge">49K</div>
+            <div class="card-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="item-icon">
+                <div class="item-label">5,000 ROBUX</div>
             </div>
-            <button class="btn-main" id="spinBtn" onclick="spin()">QUAY NGAY</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#888; margin-top:10px; cursor:pointer;">Đóng</button>
+            <div class="card-info"><div class="buy-txt">BẤM ĐỂ KHUI QUÀ</div></div>
+        </div>
+
+        <div class="card" onclick="openBox(99000, 'BLOX FRUIT', 'https://api.dicebear.com/7.x/bottts/svg?seed=fruit')">
+            <div class="price-badge">99K</div>
+            <div class="card-img">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=fruit" class="item-icon">
+                <div class="item-label">RANDOM FRUIT</div>
+            </div>
+            <div class="card-info"><div class="buy-txt">TỈ LỆ RA KITSUNE CAO</div></div>
+        </div>
+
+        <div class="card" onclick="openBox(199000, 'BADDIES BRAWL', 'https://api.dicebear.com/7.x/avataaars/svg?seed=baddy')">
+            <div class="price-badge">199K</div>
+            <div class="card-img">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=baddy" class="item-icon">
+                <div class="item-label">BADDIES PACK</div>
+            </div>
+            <div class="card-info"><div class="buy-txt">GÓI NHÂN VẬT VIP</div></div>
+        </div>
+
+        <div class="card" onclick="openBox(500000, 'SUPER MECH', 'https://api.dicebear.com/7.x/bottts/svg?seed=mech')">
+            <div class="price-badge">500K</div>
+            <div class="card-img">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=mech" class="item-icon">
+                <div class="item-label">GODLY ITEM</div>
+            </div>
+            <div class="card-info"><div class="buy-txt">VẬT PHẨM TỐI THƯỢNG</div></div>
+        </div>
+    </div>
+
+    <div class="withdraw-area">
+        <h2 style="color:var(--neon-blue); margin-top:0;">💎 RÚT ROBUX TỨ THÌ</h2>
+        <input type="text" id="wdUser" placeholder="Tên nhân vật Roblox...">
+        <input type="number" id="wdAmt" placeholder="Số lượng Robux...">
+        <button class="btn-withdraw" onclick="withdraw()">XÁC NHẬN RÚT NGAY</button>
+        <p id="statusTxt" style="font-size:12px; margin-top:10px; color:#888;"></p>
+    </div>
+
+    <div id="giftModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle" style="color:var(--sakura); margin:0;">ĐANG KHUI QUÀ...</h2>
+            <div id="loader" class="loading-spin"></div>
+            <div id="result" style="display:none;">
+                <img id="resultImg" src="" style="width:120px; filter: drop-shadow(0 0 20px var(--neon-pink));">
+                <h3 id="resultTxt" style="color:#00ff00;">BẠN ĐÃ NHẬN ĐƯỢC!</h3>
+                <button onclick="closeModal()" style="background:var(--sakura); border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;">TUYỆT VỜI</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let money = 50000; let robux = 0;
-        // Trợ cấp 10k mỗi 30s
-        setInterval(() => { money += 10000; update(); }, 30000);
+        let money = 100000;
+        let robux = 0;
+
+        // --- TRỢ CẤP 100K MỖI 10 GIÂY ---
+        setInterval(() => {
+            money += 100000;
+            update();
+        }, 10000);
 
         function update() {
             document.getElementById('money').innerText = money.toLocaleString();
             document.getElementById('robux').innerText = robux.toLocaleString();
         }
 
-        function buy(p, r) {
-            if(money >= p) { money -= p; robux += r; update(); alert("✅ Đã mua thành công!"); }
-            else { alert("❌ Bạn không đủ tiền!"); }
-        }
+        function openBox(price, type, img) {
+            if(money < price) { alert("Thiếu tiền rồi! Đợi 10s nhé."); return; }
+            money -= price; update();
 
-        function openWheel() { document.getElementById('wheelModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('wheelModal').style.display = 'none'; }
+            const modal = document.getElementById('giftModal');
+            const loader = document.getElementById('loader');
+            const result = document.getElementById('result');
+            const title = document.getElementById('modalTitle');
+            
+            modal.style.display = 'flex';
+            loader.style.display = 'block';
+            result.style.display = 'none';
+            title.innerText = "ĐANG XỬ LÝ GIAO DỊCH...";
 
-        function spin() {
-            if(money < 149000) { alert("Thiếu tiền mở túi!"); return; }
-            money -= 149000; update();
-            const btn = document.getElementById('spinBtn');
-            btn.disabled = true;
-            const deg = Math.floor(Math.random() * 360) + 1800;
-            document.getElementById('mainWheel').style.transform = `rotate(${deg}deg)`;
             setTimeout(() => {
-                let win = [100, 500, 10000, 50000][Math.floor(Math.random()*4)];
-                alert(`🌸 TRÚNG ${win.toLocaleString()} ROBUX!`);
-                robux += win; update(); btn.disabled = false;
-            }, 4000);
+                loader.style.display = 'none';
+                result.style.display = 'block';
+                title.innerText = "CHÚC MỪNG!";
+                document.getElementById('resultImg').src = img;
+                
+                // Giả lập cộng quà
+                if(type === 'ROBUX PACK') { 
+                    robux += 5000; 
+                    document.getElementById('resultTxt').innerText = "BẠN NHẬN 5,000 ROBUX!";
+                } else {
+                    document.getElementById('resultTxt').innerText = "BẠN NHẬN VẬT PHẨM: " + type;
+                }
+                update();
+            }, 2500);
         }
+
+        function closeModal() { document.getElementById('giftModal').style.display = 'none'; }
 
         function withdraw() {
-            let name = document.getElementById('wdName').value;
-            let amt = parseInt(document.getElementById('wdAmount').value);
-            let msg = document.getElementById('wdMsg');
-            let btn = document.getElementById('wdBtn');
-            let loader = document.getElementById('wdLoader');
+            let user = document.getElementById('wdUser').value;
+            let amt = document.getElementById('wdAmt').value;
+            let stt = document.getElementById('statusTxt');
 
-            if(!name || !amt) { alert("Nhập đủ thông tin!"); return; }
-            if(amt > robux) { alert("Bạn không có đủ Robux!"); return; }
+            if(!user || !amt) { alert("Nhập đủ thông tin mới rút được!"); return; }
+            if(amt > robux) { alert("Bạn không đủ Robux để rút!"); return; }
 
-            btn.style.display = "none";
-            loader.style.display = "block";
-            msg.innerText = "Đang kết nối đến máy chủ Roblox...";
+            stt.innerText = "🚀 Đang gửi yêu cầu đến Admin hệ thống...";
+            stt.style.color = "yellow";
 
             setTimeout(() => {
                 robux -= amt; update();
-                loader.style.display = "none";
-                btn.style.display = "block";
-                msg.style.color = "#00ff00";
-                msg.innerText = `✅ THÀNH CÔNG! ${amt.toLocaleString()} Robux đang được chuyển đến ${name}.`;
-                document.getElementById('wdAmount').value = "";
+                stt.innerText = "✅ THÀNH CÔNG! Robux sẽ được chuyển đến " + user + " sau 5-10 phút.";
+                stt.style.color = "#00ff00";
             }, 3000);
         }
 
-        // Hoa rơi
+        // Cánh hoa Sakura đa sắc
         setInterval(() => {
             const p = document.createElement('div');
             p.className = 'petal';
             p.style.left = Math.random() * 100 + 'vw';
-            p.style.width = p.style.height = Math.random() * 7 + 5 + 'px';
+            p.style.width = p.style.height = Math.random() * 8 + 5 + 'px';
+            p.style.background = ['#ffb7c5', '#ff007f', '#00f2ff'][Math.floor(Math.random()*3)];
             p.style.animationDuration = Math.random() * 3 + 2 + 's';
+            p.style.top = "-10px";
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 5000);
-        }, 300);
+        }, 200);
+
         update();
     </script>
 </body>
