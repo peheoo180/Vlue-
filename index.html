@@ -3,149 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Sakura Center</title>
+    <title>Roblox Redeem Center - Sakura</title>
     <style>
+        :root { --main-pink: #ffb7c5; --glow-pink: #ff8fa3; }
         body {
             background: #0d0d0d;
             color: #fff;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
             overflow: hidden;
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.ibb.co/L6V2YvQ/sakura-bg.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://i.ibb.co/L6V2YvQ/sakura-bg.jpg');
             background-size: cover;
-            background-position: center;
         }
 
-        /* Dòng chữ nhỏ cảnh báo ở góc */
-        .notice {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.3);
-            text-align: right;
-            pointer-events: none;
+        /* Disclaimer góc phải */
+        .disclaimer {
+            position: absolute; top: 15px; right: 15px;
+            font-size: 10px; color: rgba(255, 255, 255, 0.4);
+            text-align: right; line-height: 1.4;
         }
 
-        .box {
-            background: rgba(30, 30, 30, 0.9);
-            padding: 35px;
-            border-radius: 25px;
-            border: 2px solid #ffb7c5;
-            text-align: center;
-            backdrop-filter: blur(8px);
+        /* Khung chính giống ảnh */
+        .redeem-container {
+            background: rgba(40, 20, 25, 0.6);
+            padding: 40px;
+            border-radius: 30px;
+            border: 2px solid var(--main-pink);
             box-shadow: 0 0 40px rgba(255, 183, 197, 0.2);
-            width: 320px;
-            z-index: 5;
-        }
-
-        .logo {
-            width: 150px;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 8px #fff);
-        }
-
-        h2 { color: #ffb7c5; margin: 0 0 10px 0; letter-spacing: 1px; }
-
-        input {
-            width: 90%;
-            padding: 12px;
-            background: #000;
-            border: 1px solid #ffb7c5;
-            color: #00ff00;
-            border-radius: 10px;
             text-align: center;
-            font-weight: bold;
+            width: 450px;
+            position: relative;
+        }
+
+        .roblox-header { width: 220px; filter: drop-shadow(0 0 10px #fff); margin-bottom: 20px; }
+        
+        h1 { font-size: 32px; letter-spacing: 3px; color: #fff; text-shadow: 0 0 10px var(--main-pink); margin: 0; }
+        .sub-text { font-size: 14px; opacity: 0.9; margin: 10px 0 25px; }
+
+        .input-box {
+            background: #111;
+            border: 2px solid #fff;
+            border-radius: 15px;
+            padding: 15px;
             margin-bottom: 20px;
-            outline: none;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+        input {
+            background: transparent; border: none; color: #fff;
+            font-size: 20px; width: 100%; text-align: left; outline: none;
         }
 
-        .btn {
-            background: #ffb7c5;
-            color: #4a101a;
-            border: none;
-            padding: 13px;
-            width: 100%;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+        .btn-redeem {
+            background: linear-gradient(to bottom, #ffcbd5, #ff8fa3);
+            border: none; padding: 15px; width: 100%;
+            border-radius: 15px; font-size: 22px; font-weight: bold;
+            color: #4a101a; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 143, 163, 0.4);
         }
 
-        .btn:hover { background: #fff; transform: scale(1.03); }
-
-        #result { margin-top: 15px; font-weight: bold; min-height: 20px; }
-
-        /* Hiệu ứng hoa rơi */
-        .petal {
-            position: absolute;
-            background: #ffb7c5;
-            border-radius: 150% 0 150% 0;
-            opacity: 0.6;
-            pointer-events: none;
-            animation: fall linear infinite;
+        /* Bảng thông báo vật phẩm (Popup) */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center; z-index: 100;
         }
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); }
-            100% { transform: translateY(110vh) rotate(360deg); }
+        .modal-content {
+            background: #1a1a1a; padding: 30px; border-radius: 20px;
+            border: 2px solid #00ff00; text-align: center; width: 300px;
         }
+        .item-img { width: 150px; height: 150px; border-radius: 10px; margin: 15px 0; border: 1px solid #333; }
+        .btn-close { background: #00ff00; color: #000; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        /* Hoa rơi */
+        .sakura { position: absolute; background: #ffb7c5; border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
+        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="notice">
-        Mô phỏng giải trí - Không cổ xúy lừa đảo.<br>Vui lòng cảnh giác với các trang web giả mạo.
+    <div class="disclaimer">
+        This is a simulation only, intended for entertainment and not for scams...<br>
+        Đây chỉ là mô phỏng, mang giải trí và không cổ xúy cho những hành động lừa đảo...
     </div>
 
-    <div class="box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="logo" alt="Roblox">
+    <div class="redeem-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/2560px-Roblox_player_icon_black.svg.png" class="roblox-header">
+        <h1>🌸 REDEEM CENTER 🌸</h1>
+        <p class="sub-text">Enter your drawing codes below<br>Nhập mã tự vẽ của bạn vào đây</p>
         
-        <h2>REDEEM</h2>
-        <p style="font-size: 13px; color: #ffb7c5;">Nhập mã tự vẽ của bạn vào đây</p>
+        <div class="input-box">
+            <span style="font-size: 10px; display: block; color: #aaa; text-align: left;">ENTER CODE HERE...</span>
+            <input type="text" id="codeInp" placeholder="CODEXXX">
+        </div>
+
+        <button class="btn-redeem" onclick="check()">🌸 XÁC NHẬN MÃ 🌸</button>
         
-        <input type="text" id="codeInp" placeholder="MÃ CODE...">
-        <button class="btn" onclick="check()">XÁC NHẬN</button>
-        
-        <div id="result"></div>
+        <div id="status" style="margin-top: 20px; font-weight: bold;"></div>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #00ff00;">XÁC NHẬN THÀNH CÔNG!</h2>
+            <p id="itemName">Vật phẩm: [Tên vật phẩm]</p>
+            <img src="https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" id="itemImg" class="item-img">
+            <p style="font-size: 13px;">Vật phẩm đã có trong kho của bạn.</p>
+            <button class="btn-close" onclick="closeModal()">ĐÓNG</button>
+        </div>
     </div>
 
     <script>
-        // --- THAY 4 MÃ CỦA BẠN VÀO ĐÂY ---
-        const listCode = ["CODE1", "CODE2", "CODE3", "CODE4"];
+        // --- CHỖ CÀI MÃ VÀ ẢNH VẬT PHẨM ---
+        const giftData = {
+            "CODE1": { name: "Kiếm Hoa Đào", img: "https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" },
+            "CODE2": { name: "Cánh Thiên Thần", img: "https://i.ibb.co/L6V2YvQ/sakura-bg.jpg" }
+        };
 
         function check() {
             let val = document.getElementById('codeInp').value.trim().toUpperCase();
-            let res = document.getElementById('result');
-
-            if (listCode.includes(val)) {
-                res.style.color = "#00ff00";
-                res.innerHTML = "✅ XỬ LÝ THÀNH CÔNG!<br>Vật phẩm đã được chuyển vào kho của bạn.";
-            } else if (val === "") {
-                res.style.color = "#ffff00";
-                res.innerHTML = "Nhập mã đi bạn ơi!";
+            let status = document.getElementById('status');
+            
+            if (giftData[val]) {
+                document.getElementById('itemName').innerText = "Vật phẩm: " + giftData[val].name;
+                document.getElementById('itemImg').src = giftData[val].img;
+                document.getElementById('itemModal').style.display = 'flex';
+                status.innerHTML = "";
             } else {
-                res.style.color = "#ff4d4d";
-                res.innerHTML = "❌ Mã không hợp lệ!";
+                status.style.color = "#ff4d4d";
+                status.innerHTML = "❌ MÃ SAI RỒI BẠN ƠI!";
             }
         }
 
-        // Hiệu ứng hoa anh đào rơi
-        function spawnPetal() {
-            const p = document.createElement('div');
-            p.className = 'petal';
-            p.style.left = Math.random() * 100 + 'vw';
-            let size = Math.random() * 8 + 5 + 'px';
-            p.style.width = size;
-            p.style.height = size;
-            p.style.animationDuration = Math.random() * 3 + 3 + 's';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 6000);
+        function closeModal() { document.getElementById('itemModal').style.display = 'none'; }
+
+        // Hiệu ứng hoa rơi
+        function createSakura() {
+            const s = document.createElement('div');
+            s.className = 'sakura';
+            s.style.left = Math.random() * 100 + 'vw';
+            let size = Math.random() * 7 + 5 + 'px';
+            s.style.width = size; s.style.height = size;
+            s.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 5000);
         }
-        setInterval(spawnPetal, 400);
+        setInterval(createSakura, 200);
     </script>
 </body>
 </html>
