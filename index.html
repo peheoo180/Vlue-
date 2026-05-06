@@ -3,105 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKURA SIMULATOR 2026</title>
+    <title>SAKURA ULTIMATE SIM</title>
     <style>
-        :root { --sakura: #ffb7c5; --neon: #ff007f; --cyan: #00f2ff; }
-        body { background: #080808; color: white; font-family: 'Arial', sans-serif; margin: 0; }
+        :root { --sakura: #ffb7c5; --neon: #ff007f; --cyan: #00f2ff; --gold: #ffd700; }
+        body { background: #050505; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Header uy tín */
+        /* Hiệu ứng hào quang cho Header */
         header { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px 20px; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--sakura);
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 0 15px var(--sakura);
         }
-        .balance { display: flex; gap: 10px; }
-        .stat { background: #1a1a1a; padding: 5px 12px; border-radius: 10px; border: 1px solid var(--sakura); font-size: 14px; font-weight: bold; }
+        .balance { display: flex; gap: 8px; }
+        .stat { background: #111; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--sakura); font-size: 13px; font-weight: bold; }
 
-        /* Banner cảnh báo Simulator (Giúp né quét scam) */
-        .disclaimer { background: #ff0055; color: white; text-align: center; font-size: 10px; padding: 5px; font-weight: bold; }
-
-        /* Shop Grid */
-        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .item-card { 
-            background: #151515; border-radius: 15px; border: 1.5px solid rgba(255,255,255,0.1);
+        /* Grid sản phẩm RGB cực căng */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .card { 
+            background: #111; border-radius: 15px; border: 2px solid #222; 
             position: relative; overflow: hidden; transition: 0.3s;
+            text-align: center; padding-bottom: 10px;
         }
-        .item-card:active { transform: scale(0.95); }
-        .price-tag { position: absolute; top: 8px; left: 8px; background: var(--neon); padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: bold; }
+        .card:hover { transform: scale(1.03); border-color: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
         
-        .img-box { height: 130px; background: radial-gradient(circle, #333, #000); display: flex; align-items: center; justify-content: center; position: relative; }
-        .img-box img { width: 60px; filter: drop-shadow(0 0 10px var(--sakura)); }
+        .card-img { height: 120px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #222, #000); }
+        .card-img img { width: 60px; filter: drop-shadow(0 0 8px #fff); }
+        
+        .price-tag { position: absolute; top: 5px; right: 5px; background: var(--neon); padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
+        .name { font-size: 12px; font-weight: bold; margin: 10px 0; color: var(--sakura); }
+        .btn-buy { background: var(--sakura); border: none; padding: 8px; width: 90%; border-radius: 5px; font-weight: bold; cursor: pointer; color: #000; }
 
-        .info { padding: 10px; text-align: center; }
-        .name { font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--sakura); }
-        .btn-open { background: var(--sakura); border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* Modal hiệu ứng */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-box { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid var(--sakura); text-align: center; width: 280px; }
-        .spin-loader { width: 50px; height: 50px; border: 5px solid #333; border-top: 5px solid var(--neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        /* Modal Loading chuyên nghiệp */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-box { background: #151515; border: 2px solid var(--sakura); padding: 30px; border-radius: 20px; text-align: center; width: 280px; box-shadow: 0 0 30px var(--sakura); }
+        .loader { width: 50px; height: 50px; border: 5px solid #222; border-top: 5px solid var(--neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Cánh hoa rơi */
-        .petal { position: absolute; background: var(--sakura); border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
-        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
+        /* Cánh hoa rơi đa sắc */
+        .petal { position: absolute; border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="disclaimer">ĐÂY LÀ TRANG MÔ PHỎNG GIẢ LẬP - KHÔNG CÓ GIÁ TRỊ THẬT</div>
-
 <header>
-    <div style="font-weight:900; letter-spacing:1px;">SAKURA SIM</div>
+    <div style="font-weight:900; color:var(--sakura); text-shadow: 0 0 5px var(--neon);">SAKURA ULTIMATE</div>
     <div class="balance">
         <div class="stat" style="color:#00ff00;">💰 <span id="money">100,000</span></div>
         <div class="stat" style="color:var(--cyan);">💎 <span id="rbx">0</span></div>
     </div>
 </header>
 
-<div class="shop-grid">
-    <div class="item-card" onclick="unbox(49000, 5000, 'Robux Pack', 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg')">
-        <div class="price-tag">49,000$</div>
-        <div class="img-box"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg"></div>
-        <div class="info">
-            <div class="name">5,000 ROBUX</div>
-            <button class="btn-open">KHUI GÓI</button>
-        </div>
+<div class="grid">
+    <div class="card" onclick="openBox(49000, 5000, 'GÓI 5,000 R$', 'https://api.dicebear.com/7.x/icons/svg?seed=diamond')">
+        <div class="price-tag">49K</div>
+        <div class="card-img"><img src="https://api.dicebear.com/7.x/icons/svg?seed=diamond"></div>
+        <div class="name">GÓI ROBUX VIP</div>
+        <button class="btn-buy">MUA GÓI</button>
     </div>
 
-    <div class="item-card" onclick="unbox(99000, 0, 'Blox Fruit', 'https://api.dicebear.com/7.x/bottts/svg?seed=fruit')">
-        <div class="price-tag">99,000$</div>
-        <div class="img-box"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=fruit"></div>
-        <div class="info">
-            <div class="name">RANDOM FRUIT</div>
-            <button class="btn-open">KHUI GÓI</button>
-        </div>
+    <div class="card" onclick="openBox(99000, 0, 'TRÁI ÁC QUỶ KITSUNE', 'https://api.dicebear.com/7.x/bottts/svg?seed=fruit')">
+        <div class="price-tag">99K</div>
+        <div class="card-img"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=fruit"></div>
+        <div class="name">BLOX FRUIT BOX</div>
+        <button class="btn-buy">MUA GÓI</button>
     </div>
 
-    <div class="item-card" onclick="unbox(149000, 0, 'Baddies Skin', 'https://api.dicebear.com/7.x/avataaars/svg?seed=baddy')">
-        <div class="price-tag">149,000$</div>
-        <div class="img-box"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=baddy"></div>
-        <div class="info">
-            <div class="name">BADDIES PACK</div>
-            <button class="btn-open">KHUI GÓI</button>
-        </div>
+    <div class="card" onclick="openBox(149000, 0, 'SKIN BADDIES HIẾM', 'https://api.dicebear.com/7.x/avataaars/svg?seed=baddy')">
+        <div class="price-tag">149K</div>
+        <div class="card-img"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=baddy"></div>
+        <div class="name">BADDIES PACK</div>
+        <button class="btn-buy">MUA GÓI</button>
     </div>
 
-    <div class="item-card" onclick="unbox(500000, 100000, 'Godly Robux', 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg')">
-        <div class="price-tag">500,000$</div>
-        <div class="img-box"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg"></div>
-        <div class="info">
-            <div class="name">100K ROBUX</div>
-            <button class="btn-open">KHUI GÓI</button>
-        </div>
+    <div class="card" onclick="openBox(199000, 0, 'NHÂN VẬT B-BRAWL VIP', 'https://api.dicebear.com/7.x/avataaars/svg?seed=brawl')">
+        <div class="price-tag">199K</div>
+        <div class="card-img"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=brawl"></div>
+        <div class="name">BADDIES BRAWL</div>
+        <button class="btn-buy">MUA GÓI</button>
     </div>
 </div>
 
-<div style="padding:20px; text-align:center;">
-    <div style="background:#111; padding:20px; border-radius:15px; border:1px dashed var(--sakura);">
-        <h4 style="margin:0 0 10px 0; color:var(--cyan);">RÚT ROBUX SIMULATOR</h4>
-        <input type="text" id="name" placeholder="Tên nhân vật..." style="width:80%; padding:10px; margin-bottom:10px; border-radius:5px; border:none; background:#222; color:#fff;">
-        <button onclick="withdraw()" style="background:var(--cyan); border:none; padding:10px 20px; border-radius:5px; font-weight:bold; cursor:pointer;">XÁC NHẬN RÚT</button>
+<div style="padding: 20px; text-align: center;">
+    <div style="background:#111; padding:20px; border-radius:15px; border:1px dashed var(--cyan);">
+        <h3 style="color:var(--cyan); margin-top:0;">RÚT THƯỞNG VỀ MÁY</h3>
+        <input type="text" id="username" placeholder="Nhập tên nhân vật..." style="width:85%; padding:12px; margin-bottom:10px; background:#000; border:1px solid var(--sakura); color:#fff; text-align:center; border-radius:8px;">
+        <button onclick="withdraw()" style="background:var(--cyan); border:none; padding:12px 25px; border-radius:8px; font-weight:bold; cursor:pointer; width:90%;">XÁC NHẬN RÚT</button>
         <p id="wdStatus" style="font-size:12px; margin-top:10px;"></p>
     </div>
 </div>
@@ -109,37 +96,32 @@
 <div id="modal" class="modal">
     <div class="modal-box">
         <h3 id="mTitle" style="color:var(--sakura);">ĐANG XỬ LÝ...</h3>
-        <div id="mLoader" class="spin-loader"></div>
-        <div id="mResult" style="display:none;">
-            <img id="resImg" src="" style="width:80px; margin-bottom:15px;">
-            <div id="resTxt" style="font-weight:bold; color:#00ff00; margin-bottom:15px;"></div>
-            <button onclick="document.getElementById('modal').style.display='none'" style="background:var(--sakura); border:none; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer;">NHẬN NGAY</button>
+        <div id="loader" class="loader"></div>
+        <div id="result" style="display:none;">
+            <img id="resImg" src="" style="width:100px; filter: drop-shadow(0 0 15px var(--neon));">
+            <h4 id="resTxt" style="color:#00ff00; margin: 15px 0;"></h4>
+            <button onclick="document.getElementById('modal').style.display='none'" class="btn-buy">NHẬN VẬT PHẨM</button>
         </div>
     </div>
 </div>
 
 <script>
-    let money = 100000;
-    let rbx = 0;
-
-    // Tự cộng tiền 100k mỗi 10 giây
-    setInterval(() => {
-        money += 100000;
-        update();
-    }, 10000);
+    let money = 100000; let rbx = 0;
+    // +100k mỗi 10 giây
+    setInterval(() => { money += 100000; update(); }, 10000);
 
     function update() {
         document.getElementById('money').innerText = money.toLocaleString();
         document.getElementById('rbx').innerText = rbx.toLocaleString();
     }
 
-    function unbox(p, amt, name, img) {
-        if(money < p) { alert("Thiếu tiền rồi!"); return; }
-        money -= p; update();
+    function openBox(price, amount, name, img) {
+        if(money < price) { alert("Không đủ tiền rồi! Chờ 10s nhé."); return; }
+        money -= price; update();
         
         const modal = document.getElementById('modal');
-        const loader = document.getElementById('mLoader');
-        const result = document.getElementById('mResult');
+        const loader = document.getElementById('loader');
+        const result = document.getElementById('result');
         
         modal.style.display = 'flex';
         loader.style.display = 'block';
@@ -151,35 +133,36 @@
             result.style.display = 'block';
             document.getElementById('mTitle').innerText = "THÀNH CÔNG!";
             document.getElementById('resImg').src = img;
-            document.getElementById('resTxt').innerText = "Bạn nhận được: " + (amt > 0 ? amt.toLocaleString() + " Robux" : name);
-            if(amt > 0) rbx += amt;
+            document.getElementById('resTxt').innerText = "BẠN NHẬN ĐƯỢC: " + name;
+            if(amount > 0) rbx += amount;
             update();
         }, 2000);
     }
 
     function withdraw() {
-        let user = document.getElementById('name').value;
-        if(!user) { alert("Nhập tên đã!"); return; }
+        let name = document.getElementById('username').value;
+        if(!name) { alert("Nhập tên đã bạn ơi!"); return; }
         let stt = document.getElementById('wdStatus');
-        stt.innerText = "⏳ Đang kết nối server Roblox...";
-        stt.style.color = "yellow";
+        stt.innerText = "⏳ Đang kết nối server Sakura..."; stt.style.color = "yellow";
         setTimeout(() => {
-            stt.innerText = "✅ Đã gửi yêu cầu! Robux sẽ về tài khoản " + user + " sau ít phút.";
+            stt.innerText = "✅ Yêu cầu rút đã được gửi thành công đến " + name + "!";
             stt.style.color = "#00ff00";
         }, 3000);
     }
 
-    // Hiệu ứng hoa Sakura
+    // Hiệu ứng hoa Sakura đa sắc
     setInterval(() => {
         const p = document.createElement('div');
         p.className = 'petal';
         p.style.left = Math.random() * 100 + 'vw';
-        p.style.width = p.style.height = Math.random() * 7 + 5 + 'px';
+        p.style.width = p.style.height = Math.random() * 8 + 4 + 'px';
+        p.style.background = ['#ffb7c5', '#ff007f', '#00f2ff', '#ffd700'][Math.floor(Math.random()*4)];
         p.style.animationDuration = Math.random() * 3 + 2 + 's';
         p.style.top = "-10px";
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 5000);
-    }, 300);
+    }, 200);
+    update();
 </script>
 </body>
 </html>
