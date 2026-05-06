@@ -3,105 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REDEEM CENTER</title>
+    <title>Roblox Redeem - Sakura Edition</title>
     <style>
-        /* Giao diện tối, viền đỏ/hồng cho cháy */
         body {
-            background-color: #0d0d0d;
-            color: #ffffff;
+            background: #0f0f0f;
+            color: white;
             font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            /* Ảnh nền hoa anh đào - bạn có thể thay link ảnh khác nếu muốn */
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://i.ibb.co/L6V2YvQ/sakura-bg.jpg');
+            background-size: cover;
+            background-position: center;
         }
-        .container {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 15px;
+
+        /* Dòng cảnh báo nhỏ ở góc */
+        .disclaimer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: right;
+            max-width: 250px;
+            pointer-events: none;
+        }
+
+        .redeem-card {
+            background: rgba(26, 26, 26, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ffb7c5; /* Màu hồng hoa đào */
             text-align: center;
-            border: 2px solid #ff0055;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
-            width: 90%;
-            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 183, 197, 0.3);
+            width: 350px;
+            z-index: 10;
         }
-        /* Chỗ này để ảnh của bạn */
-        .banner-img {
-            width: 100%;
-            border-radius: 10px;
+
+        .roblox-logo {
+            width: 180px;
             margin-bottom: 20px;
-            border: 1px solid #333;
+            filter: drop-shadow(0 0 5px white);
         }
-        h2 { letter-spacing: 2px; color: #ff0055; }
+
+        h2 { color: #ffb7c5; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
         input {
-            width: 80%;
+            width: 90%;
             padding: 12px;
-            border-radius: 5px;
-            border: 1px solid #444;
             background: #000;
-            color: #00ff00;
-            font-weight: bold;
+            border: 1px solid #ffb7c5;
+            color: #ffb7c5;
+            border-radius: 8px;
             text-align: center;
-            font-size: 1.1rem;
-        }
-        .btn {
-            background: #ff0055;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
             font-weight: bold;
-            margin-top: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffb7c5, #ff8fa3);
+            color: #5d1a27;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
-            width: 88%;
+            text-transform: uppercase;
             transition: 0.3s;
         }
-        .btn:hover { background: #ff3377; transform: scale(1.02); }
-        #status { margin-top: 15px; font-weight: bold; }
+
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffb7c5; }
+
+        #msg { margin-top: 20px; font-weight: bold; font-size: 14px; }
+
+        /* Hiệu ứng cánh hoa rơi nhẹ nhàng */
+        .sakura {
+            position: absolute;
+            background-color: #ffb7c5;
+            border-radius: 100% 0 100% 0;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="https://i.ibb.co/xxxxx/your-photo.jpg" class="banner-img" alt="Baddie Center">
-    
-    <h2>REDEEM CODES</h2>
-    <p>Nhập mã bạn tự vẽ vào đây:</p>
-    
-    <input type="text" id="coupon" placeholder="ENTER CODE...">
-    <button class="btn" onclick="processRedeem()">XÁC NHẬN MÃ</button>
-    
-    <div id="status"></div>
-</div>
+    <div class="disclaimer">
+        Đây chỉ là mô phỏng, mang tính chất giải trí và không cổ xúy cho những hành động lừa đảo. Hãy cảnh giác với các trò gian lận.
+    </div>
 
-<script>
-    function processRedeem() {
-        var input = document.getElementById("coupon").value.trim().toUpperCase();
-        var status = document.getElementById("status");
+    <div class="redeem-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="roblox-logo" alt="Roblox">
+        <h2>🌸 Sakura Redeem 🌸</h2>
+        <p style="font-size: 12px; opacity: 0.8;">Nhập 4 mã tự vẽ của bạn vào bên dưới</p>
+        
+        <input type="text" id="userCode" placeholder="NHẬP MÃ TẠI ĐÂY...">
+        <button class="btn" onclick="redeem()">XÁC NHẬN MÃ</button>
+        
+        <div id="msg"></div>
+    </div>
 
-        // --- CHỖ SỬA 4 CÁI MÃ CỦA BẠN ---
-        var code1 = "MA1"; 
-        var code2 = "MA2";
-        var code3 = "MA3";
-        var code4 = "MA4";
-        // --------------------------------
+    <script>
+        // --- ĐIỀN 4 MÃ CỦA BẠN VÀO ĐÂY ---
+        const codes = ["MÃ1", "MÃ2", "MÃ3", "MÃ4"]; 
 
-        if (input === "") {
-            status.style.color = "yellow";
-            status.innerHTML = "Vui lòng nhập gì đó đi má!";
-        } 
-        else if (input === code1 || input === code2 || input === code3 || input === code4) {
-            status.style.color = "#00ff00";
-            status.innerHTML = "✅ MÃ CHUẨN! Đang xử lý phần thưởng...";
-            // Bạn có thể thêm lệnh chuyển hướng link ở đây nếu muốn
-        } 
-        else {
-            status.style.color = "#ff0000";
-            status.innerHTML = "❌ Mã này sai rồi, kiểm tra lại đi!";
+        function redeem() {
+            let val = document.getElementById('userCode').value.trim().toUpperCase();
+            let msg = document.getElementById('msg');
+
+            if (codes.includes(val)) {
+                msg.style.color = "#a8ff9c";
+                msg.innerHTML = "✅ XỬ LÝ THÀNH CÔNG!<br>Vật phẩm đã được chuyển vào kho của bạn.";
+            } else if (val === "") {
+                msg.style.color = "#ffeb3b";
+                msg.innerHTML = "Vui lòng nhập mã!";
+            } else {
+                msg.style.color = "#ff8fa3";
+                msg.innerHTML = "❌ Mã không hợp lệ!";
+            }
         }
-    }
-</script>
+
+        // Tạo hiệu ứng cánh hoa rơi
+        function createSakura() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('sakura');
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.width = Math.random() * 10 + 5 + 'px';
+            leaf.style.height = leaf.style.width;
+            leaf.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(leaf);
+            setTimeout(() => { leaf.remove(); }, 5000);
+        }
+        setInterval(createSakura, 300);
+    </script>
 
 </body>
 </html>
