@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox | Redeem Toy Code</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f4f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h2 { color: #393b3d; }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #00b06f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        button:hover { background-color: #008a56; }
+
+        /* Cái Popup khi nạp thành công */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            padding: 20px;
+            z-index: 100;
+            text-align: center;
+            width: 300px;
+        }
+        #popup img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 50;
+        }
+        .success-text { color: #00b06f; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" width="50" alt="logo">
+    <h2>Redeem Roblox Item</h2>
+    <p>Enter your toy code below to claim your virtual item.</p>
+    <input type="text" id="toyCode" placeholder="Enter Code (e.g. 123456)">
+    <button onclick="checkCode()">REDEEM</button>
+</div>
+
+<div id="overlay"></div>
+<div id="popup">
+    <div class="success-text">SUCCESSFULLY REDEEMED!</div>
+    <p>You have received:</p>
+    <img id="itemImage" src="https://tr.rbxcdn.com/159497e0123986429f647990151f153a/420/420/Image/Png" alt="Baddie Face">
+    <h3 id="itemName">Baddie Street Face</h3>
+    <button onclick="closePopup()">AWESOME!</button>
+</div>
+
+<script>
+    function checkCode() {
+        var code = document.getElementById("toyCode").value;
+        var popup = document.getElementById("popup");
+        var overlay = document.getElementById("overlay");
+
+        // Mày có thể đổi cái mã "BADDIE666" thành bất cứ gì mày thích
+        if (code.toUpperCase() === "BADDIE666") {
+            overlay.style.display = "block";
+            popup.style.display = "block";
+        } else {
+            alert("Mã này dỏm rồi mày ơi! Nhập lại đi.");
+        }
+    }
+
+    function closePopup() {
+        location.reload(); // Bấm xong cho nó load lại trang như thật
+    }
+</script>
+
+</body>
+</html>
