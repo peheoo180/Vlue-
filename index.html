@@ -8,140 +8,135 @@
         :root { --sakura: #ffb7c5; --dark-pink: #ff8fa3; --bg: #0f0f0f; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Disclaimer chuyên nghiệp */
         .top-bar { background: rgba(255, 183, 197, 0.1); text-align: center; padding: 5px; font-size: 10px; color: var(--sakura); letter-spacing: 1px; }
 
-        /* Header sạch sẽ */
         header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,183,197,0.3); background: rgba(0,0,0,0.5); }
         .logo-text { font-size: 22px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--sakura); }
         .balance-box { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--sakura); font-size: 14px; }
 
-        /* Danh mục sản phẩm */
         .shop-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
         
-        .item-card { background: #1a1a1a; border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,183,197,0.2); transition: 0.3s; }
-        .item-card:hover { border-color: var(--sakura); transform: translateY(-5px); }
+        .item-card { background: #1a1a1a; border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,183,197,0.2); text-align: center; padding-bottom: 15px; }
+        .item-img { width: 100%; height: 140px; background: #252525; display: flex; justify-content: center; align-items: center; }
+        .item-img img { width: 60px; filter: drop-shadow(0 0 10px var(--sakura)); }
+        .item-title { font-size: 14px; font-weight: bold; margin: 10px 0; color: var(--sakura); }
         
-        .item-img { width: 100%; height: 160px; background: #252525; display: flex; justify-content: center; align-items: center; position: relative; }
-        .item-img img { width: 80%; filter: drop-shadow(0 0 10px var(--sakura)); }
-        .price-tag { position: absolute; top: 10px; left: 10px; background: var(--sakura); color: #4a101a; padding: 2px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; }
+        .btn-view { background: transparent; border: 1.5px solid var(--sakura); color: var(--sakura); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-        .item-info { padding: 12px; text-align: center; }
-        .item-title { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: var(--sakura); }
+        /* --- MODAL VÒNG QUAY --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid var(--sakura);
+            text-align: center; position: relative; width: 320px;
+        }
         
-        .btn-view { background: transparent; border: 1.5px solid var(--sakura); color: var(--sakura); padding: 8px 0; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; text-decoration: none; display: block; font-size: 12px; }
-        .btn-view:hover { background: var(--sakura); color: #4a101a; }
+        .wheel-wrap { position: relative; width: 250px; height: 250px; margin: 20px auto; }
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%; border: 5px solid #fff;
+            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            background: conic-gradient(
+                #ffb7c5 0deg 60deg, #ff8fa3 60deg 120deg, 
+                #ffb7c5 120deg 180deg, #ff8fa3 180deg 240deg, 
+                #ffb7c5 240deg 300deg, #ff8fa3 300deg 360deg
+            );
+        }
+        .wheel-pointer {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 15px solid transparent;
+            border-right: 15px solid transparent; border-top: 25px solid #fff; z-index: 10;
+        }
 
-        /* Admin Dashboard nhỏ ở dưới */
-        .admin-panel { text-align: center; padding: 20px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        #admin-status { font-size: 12px; color: #00f2ff; margin-bottom: 10px; display: none; }
+        .btn-spin {
+            background: var(--sakura); color: #4a101a; border: none; padding: 12px 30px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px;
+        }
 
-        /* Cánh hoa rơi */
+        /* Hoa rơi */
         .petal { position: absolute; background: var(--sakura); border-radius: 100% 0 100% 0; pointer-events: none; animation: fall linear infinite; z-index: 100; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">SIMULATOR MODE • GIẢI TRÍ KHÔNG CỔ XÚY LỪA ĐẢO</div>
+    <div class="top-bar">SIMULATOR MODE • GIẢI TRÍ SAKURA</div>
 
     <header>
         <div class="logo-text">SAKURA SHOP</div>
-        <div class="balance-box">💰 <span id="money">0</span>$ | 💎 <span id="robux">0</span></div>
+        <div class="balance-box">💰 <span id="money">0</span>$ | 💎 <span id="robux">0</span> R$</div>
     </header>
 
     <div class="shop-container">
         <div class="item-card">
-            <div class="item-img">
-                <div class="price-tag">49K</div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="item">
-            </div>
-            <div class="item-info">
-                <div class="item-title">Hộp Quà Anh Đào</div>
-                <button class="btn-view" onclick="buy(49000)">XEM CHI TIẾT</button>
-            </div>
+            <div class="item-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg"></div>
+            <div class="item-title">Túi Mù Đại Gia</div>
+            <button class="btn-view" onclick="openWheel()">MỞ TÚI</button>
+        </div>
         </div>
 
-        <div class="item-card">
-            <div class="item-img">
-                <div class="price-tag">99K</div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="item">
+    <div id="wheelModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--sakura); margin-top:0;">LUCKY SPIN</h2>
+            <div class="wheel-wrap">
+                <div class="wheel-pointer"></div>
+                <div id="mainWheel" class="wheel"></div>
             </div>
-            <div class="item-info">
-                <div class="item-title">Vòng Quay May Mắn</div>
-                <button class="btn-view" onclick="buy(99000)">XEM CHI TIẾT</button>
-            </div>
+            <p id="spinStatus" style="font-size:13px;">Nhấn để quay phần thưởng!</p>
+            <button class="btn-spin" id="spinBtn" onclick="spinNow()">QUAY NGAY</button>
+            <button onclick="closeModal()" style="display:block; margin: 15px auto 0; background:none; border:none; color:#888; cursor:pointer;">Đóng</button>
         </div>
-
-        <div class="item-card">
-            <div class="item-img">
-                <div class="price-tag">149K</div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="item">
-            </div>
-            <div class="item-info">
-                <div class="item-title">Túi Mù Đại Gia</div>
-                <button class="btn-view" onclick="buy(149000)">XEM CHI TIẾT</button>
-            </div>
-        </div>
-
-        <div class="item-card">
-            <div class="item-img">
-                <div class="price-tag">VIP</div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="item">
-            </div>
-            <div class="item-info">
-                <div class="item-title">Gói Tộc V4 Sakura</div>
-                <button class="btn-view" onclick="buy(500000)">XEM CHI TIẾT</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="admin-panel">
-        <div id="admin-status">★ ADMIN CHÍNH HIỆU ★ (+1 tỷ/s)</div>
-        <input type="text" id="codeIn" placeholder="Nhập code Admin..." style="background:#222; border:1px solid var(--sakura); color:#fff; padding:8px; border-radius:5px;">
-        <button onclick="checkAdmin()" style="cursor:pointer; background:var(--sakura); border:none; padding:8px 15px; border-radius:5px; font-weight:bold;">KÍCH HOẠT</button>
     </div>
 
     <script>
-        let money = 0;
-        let robux = 0;
-        let isAdmin = false;
+        let money = 0; let robuxCount = 0; let isAdmin = false;
 
-        // Tự cộng tiền
         setInterval(() => {
-            if(isAdmin) {
-                money += 1000000000;
-            } else {
-                money += 100;
-            }
+            money += (isAdmin ? 1000000000 : 100);
             document.getElementById('money').innerText = money.toLocaleString();
-            document.getElementById('robux').innerText = robux.toLocaleString();
+            document.getElementById('robux').innerText = robuxCount.toLocaleString();
         }, 1000);
 
-        function checkAdmin() {
-            let code = document.getElementById('codeIn').value.trim().toUpperCase();
-            if(code === "ADMIN") {
-                isAdmin = true;
-                document.getElementById('admin-status').style.display = 'block';
-                alert("Chào Admin Sakura! Tiền đang nhảy rồi đó.");
-            } else {
-                alert("Mã này chỉ dành cho chủ shop!");
-            }
+        function openWheel() { document.getElementById('wheelModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('wheelModal').style.display = 'none'; }
+
+        function spinNow() {
+            const wheel = document.getElementById('mainWheel');
+            const btn = document.getElementById('spinBtn');
+            btn.disabled = true;
+
+            // Tính toán kết quả ngẫu nhiên dựa trên tỉ lệ
+            // Tỉ lệ: 10k (50%), 50k (30%), 100k (15%), 500k (5%)
+            const rand = Math.random() * 100;
+            let winAmount = 0;
+            let stopDegree = 0;
+
+            if (rand < 50) { winAmount = 10000; stopDegree = 30; } // 10k
+            else if (rand < 80) { winAmount = 50000; stopDegree = 90; } // 50k
+            else if (rand < 95) { winAmount = 100000; stopDegree = 150; } // 100k
+            else { winAmount = 500000; stopDegree = 210; } // 500k
+
+            const totalRotation = 1800 + stopDegree; // Quay ít nhất 5 vòng
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+            setTimeout(() => {
+                alert(`🌸 CHÚC MỪNG! Bạn nhận được ${winAmount.toLocaleString()} Robux từ Túi Mù!`);
+                robuxCount += winAmount;
+                btn.disabled = false;
+                wheel.style.transition = 'none';
+                wheel.style.transform = `rotate(${stopDegree}deg)`;
+                setTimeout(() => wheel.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)', 50);
+            }, 4000);
         }
 
-        function buy(price) {
-            alert("Đây là bản Simulator! Bạn đang xem vật phẩm giá " + price.toLocaleString() + "$. Chúc bạn giải trí vui vẻ!");
-        }
-
-        // Hiệu ứng hoa rơi cho thơm web
+        // Tạo hoa rơi
         function createPetal() {
             const p = document.createElement('div');
             p.className = 'petal';
             p.style.left = Math.random() * 100 + 'vw';
-            let size = Math.random() * 7 + 5 + 'px';
-            p.style.width = size; p.style.height = size;
+            p.style.width = p.style.height = Math.random() * 7 + 5 + 'px';
             p.style.animationDuration = Math.random() * 3 + 2 + 's';
-            p.style.top = "-10px";
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 5000);
         }
